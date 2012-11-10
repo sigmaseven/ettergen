@@ -1,0 +1,4 @@
+if (search(DATA.data, "%match%"))
+{
+	replace("%match%","%replace%");
+}
