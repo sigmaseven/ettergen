@@ -80,6 +80,18 @@ sub getSourcePort()
 	return $self->{srcport};
 }
 
+sub setDestinationPort()
+{
+	my $self = shift;
+	$self->{dstport} = $_[0];
+}
+
+sub getDestinationPort()
+{
+	my $self = shift;
+	return $self->{dstport};
+}
+
 sub setMatch()
 {
 	my $self = shift;
