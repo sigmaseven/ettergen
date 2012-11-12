@@ -12,7 +12,8 @@ sub new
 		dstport => undef,
 		match => undef,
 		replace => undef,
-		proto => undef		
+		proto => undef,
+		regex => undef		
 	};
 
 	bless($self);
@@ -69,10 +70,14 @@ sub getDestination()
 
 sub setSourcePort()
 {
+	my $self = shift;
+	$self->{srcport} = $_[0];
 }
 
 sub getSourcePort()
 {
+	my $self = shift;
+	return $self->{srcport};
 }
 
 sub setMatch()
@@ -101,10 +106,26 @@ sub getReplace()
 
 sub setProto()
 {
+	my $self = shift;
+	$self->{proto} = $_[0];
 }
 
 sub getProto()
 {
+	my $self = shift;
+	return $self->{proto};
+}
+
+sub setRegex()
+{
+	my $self = shift;
+	$self->{regex} = $_[0];
+}
+
+sub getRegex()
+{
+	my $self = shift;
+	return $self->{regex};
 }
 
 sub generate()
@@ -113,7 +134,11 @@ sub generate()
 	my $template = $self->getTemplate();
 	my $match = $self->getMatch();
 	my $replace = $self->getReplace();
-	my $sourcefile = $self->getSource();
+	my $source = $self->getSource();
+	my $dest = $self->getDestination();
+	my $dstport = $self->getDestinationPort();
+	my $srcport = $self->getSourcePort();
+
 	my @source; # array to stuff modified source code
 	my $data = ''; # reassembled source string to be returned
 
@@ -122,6 +147,11 @@ sub generate()
 	{
 		$_ =~ s/%match%/$match/ig;
 		$_ =~ s/%replace%/$replace/ig;
+		$_ =~ s/%src%/$source/ig;
+		$_ =~ s/%dst%/$dest/ig;
+		$_ =~ s/%srcport%/$srcport/ig;
+		$_ =~ s/%dstport%/$dstport/ig;
+
 		push(@source, $_);
 	}
 	close(TEMPLATE);
@@ -131,6 +161,6 @@ sub generate()
 		$data .= $_;
 	}
 	return($data);
-}
+} # end of generate()
 
 return(1);
